@@ -1,11 +1,18 @@
 package model.entities;
 
 public class Node {
+    //@ spec_public
     private int value;
+    //@ spec_public
+    /*@ nullable */
     private Node left;
+    //@ spec_public
+    /*@ nullable */
     private Node right;
-    private Integer depth;
-    private Integer height;
+    //@ spec_public
+    private int depth;
+    //@ spec_public
+    private int height;
 
     public Node(int value) {
         this.value = value;
@@ -13,6 +20,7 @@ public class Node {
         right = null;
     }
 
+    //@ pure
     public int getValue() {
         return value;
     }
@@ -21,35 +29,41 @@ public class Node {
         this.value = value;
     }
 
+    //@ pure
+    /*@ nullable*/
     public Node getLeft() {
         return left;
     }
 
-    public void setLeft(Node left) {
+    public void setLeft(/*@ nullable */ Node left) {
         this.left = left;
     }
 
+    //@ pure
+    /*@ nullable*/
     public Node getRight() {
         return right;
     }
 
-    public void setRight(Node right) {
+    public void setRight(/*@ non_null */ Node right) {
         this.right = right;
     }
 
-    public Integer getDepth() {
+    //@ pure
+    public int getDepth() {
         return depth;
     }
 
-    public void setDepth(Integer depth) {
+    public void setDepth(int depth) {
         this.depth = depth;
     }
 
-    public Integer getHeight() {
+    //@ pure
+    public int getHeight() {
         return height;
     }
 
-    public void setHeight(Integer height) {
+    public void setHeight(int height) {
         this.height = height;
     }
 
@@ -68,10 +82,14 @@ public class Node {
             alt2 = 0;
         }
 
+        //@ assume alt1 >= 0 && alt2 >= 0;
+        //@ assume 0 < alt1 + 1 <= Integer.MAX_VALUE;
+        //@ assume 0 < alt2 + 1 <= Integer.MAX_VALUE;
         if(alt1 > alt2){
             height = alt1 + 1;
         }else{
             height = alt2 + 1;
         }
     }
+
 }
