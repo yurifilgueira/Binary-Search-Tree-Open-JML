@@ -14,6 +14,13 @@ public class Node {
     //@ spec_public
     private int height;
 
+    //@ public invariant height >= 0;
+
+    //@ public normal_behavior
+    //@ ensures Integer.MIN_VALUE <= value <= Integer.MAX_VALUE;
+    //@ ensures left == null;
+    //@ ensures right == null;
+    //@ pure
     public Node(int value) {
         this.value = value;
         left = null;
@@ -67,6 +74,7 @@ public class Node {
         this.depth = depth;
     }
 
+    //@ ensures \result >= 0;
     //@ pure
     public int getHeight() {
         return height;
