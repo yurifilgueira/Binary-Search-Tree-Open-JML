@@ -112,7 +112,9 @@ public class Node {
             height = alt2 + 1;
         }
 
-        assert height == (alt1 + 1) || height == (alt2 + 1);
+        //@ assert height == (alt1 + 1) || height == (alt2 + 1);
+        //@ assert (0 < (alt1 + 1)) && (alt1 + 1 <= Integer.MAX_VALUE);
+        //@ assert (0 < (alt2 + 1)) && (alt2 + 1 <= Integer.MAX_VALUE);
     }
 
 }
