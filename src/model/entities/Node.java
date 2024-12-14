@@ -25,6 +25,8 @@ public class Node {
         return value;
     }
 
+    //@ ensures this.value == value;
+    //@ assignable this.value;
     public void setValue(int value) {
         this.value = value;
     }
@@ -35,6 +37,8 @@ public class Node {
         return left;
     }
 
+    //@ ensures this.left == left;
+    //@ assignable this.left;
     public void setLeft(/*@ nullable */ Node left) {
         this.left = left;
     }
@@ -45,6 +49,8 @@ public class Node {
         return right;
     }
 
+    //@ ensures this.right == right;
+    //@ assignable this.right;
     public void setRight(/*@ non_null */ Node right) {
         this.right = right;
     }
@@ -54,6 +60,9 @@ public class Node {
         return depth;
     }
 
+    //@ requires depth >= 0;
+    //@ ensures this.depth == depth;
+    //@ assignable this.depth;
     public void setDepth(int depth) {
         this.depth = depth;
     }
@@ -63,10 +72,14 @@ public class Node {
         return height;
     }
 
+    //@ requires height >= 0;
+    //@ ensures this.height == height;
+    //@ assignable this.height;
     public void setHeight(int height) {
         this.height = height;
     }
 
+    //@ assignable height;
     public void setHeight(){
         int alt1, alt2;
 
@@ -90,6 +103,8 @@ public class Node {
         }else{
             height = alt2 + 1;
         }
+
+        assert height == (alt1 + 1) || height == (alt2 + 1);
     }
 
 }
