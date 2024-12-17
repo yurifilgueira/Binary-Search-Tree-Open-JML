@@ -15,6 +15,7 @@ public class Node {
     private int height;
 
     //@ public invariant height >= 0;
+    //@ public invariant depth >= 0;
 
     //@ public normal_behavior
     //@ ensures Integer.MIN_VALUE <= value <= Integer.MAX_VALUE;
@@ -27,53 +28,64 @@ public class Node {
         right = null;
     }
 
+    //@ public normal_behavior
     //@ pure
     public int getValue() {
         return value;
     }
 
+    //@ public normal_behavior
+    //@ requires Integer.MIN_VALUE <= value <= Integer.MAX_VALUE;
     //@ ensures this.value == value;
     //@ assignable this.value;
     public void setValue(int value) {
         this.value = value;
     }
 
+    //@ public normal_behavior
     //@ pure
     /*@ nullable*/
     public Node getLeft() {
         return left;
     }
 
+    //@ public normal_behavior
     //@ ensures this.left == left;
     //@ assignable this.left;
     public void setLeft(/*@ nullable */ Node left) {
         this.left = left;
     }
 
+    //@ public normal_behavior
     //@ pure
     /*@ nullable*/
     public Node getRight() {
         return right;
     }
 
+    //@ public normal_behavior
     //@ ensures this.right == right;
     //@ assignable this.right;
     public void setRight(/*@ non_null */ Node right) {
         this.right = right;
     }
 
+    //@ public normal_behavior
+    //@ ensures \result >= 0;
     //@ pure
     public int getDepth() {
         return depth;
     }
 
-    //@ requires depth >= 0;
+    //@ public normal_behavior
+    //@ requires 0 <= depth <= Integer.MAX_VALUE;
     //@ ensures this.depth == depth;
     //@ assignable this.depth;
     public void setDepth(int depth) {
         this.depth = depth;
     }
 
+    //@ public normal_behavior
     //@ ensures \result >= 0;
     //@ pure
     public int getHeight() {
@@ -103,9 +115,10 @@ public class Node {
             alt2 = 0;
         }
 
-        //@ assume alt1 >= 0 && alt2 >= 0;
-        //@ assume 0 < alt1 + 1 <= Integer.MAX_VALUE;
-        //@ assume 0 < alt2 + 1 <= Integer.MAX_VALUE;
+        //@ assert alt1 >= 0 && alt2 >= 0;
+
+        //@ assume alt1 + 1 <= Integer.MAX_VALUE;
+        //@ assume alt2 + 1 <= Integer.MAX_VALUE;
         if(alt1 > alt2){
             height = alt1 + 1;
         }else{
@@ -113,8 +126,7 @@ public class Node {
         }
 
         //@ assert height == (alt1 + 1) || height == (alt2 + 1);
-        //@ assert (0 < (alt1 + 1)) && (alt1 + 1 <= Integer.MAX_VALUE);
-        //@ assert (0 < (alt2 + 1)) && (alt2 + 1 <= Integer.MAX_VALUE);
+        //@ assert (alt1 + 1 <= Integer.MAX_VALUE) && (alt2 + 1 <= Integer.MAX_VALUE);
     }
 
 }

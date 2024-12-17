@@ -11,6 +11,8 @@ import java.util.Stack;
 public class Tree {
     private Node root;
 
+    //@ public model String toUpperCase;
+
     public Tree() {
     }
 
@@ -71,9 +73,10 @@ public class Tree {
 
         if (givenCommands != null) {
             for (String command : givenCommands) {
+
                 String[] parameters = command.split(" ");
 
-                switch(parameters[0].toUpperCase()){
+                switch(parameters[0]){
                     case "NTH", "ENESIMO":
                         System.out.println("ENÉSIMO: " + nthElement(root, Integer.parseInt(parameters[1])));
                         break;
