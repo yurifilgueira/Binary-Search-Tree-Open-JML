@@ -185,18 +185,22 @@ public class Tree {
         return distance;
     }
 
-//    public void findAllDepths(Node root){
-//        root.setDepth(findDepth(this.root, root.getValue()));
-//
-//        if(root.getLeft() != null){
-//            findAllDepths(root.getLeft());
-//        }
-//
-//        if(root.getRight() != null){
-//            findAllDepths(root.getRight());
-//        }
-//    }
-//
+    //@ public normal_behavior
+    //@ requires root != null;  // Pre-condition: the root cannot be null
+    //@ ensures (\forall Node n; \exists d; n.getDepth() == findDepth(this.root, n.getValue()));
+    //@ ensures \terminates;
+    public void findAllDepths(Node root){
+        root.setDepth(findDepth(this.root, root.getValue()));
+
+        if(root.getLeft() != null){
+            findAllDepths(root.getLeft());
+        }
+
+        if(root.getRight() != null){
+            findAllDepths(root.getRight());
+        }
+    }
+
 //    public void findAllHeights(Node root){
 //        if(root.getLeft() != null){
 //            findAllHeights(root.getLeft());
