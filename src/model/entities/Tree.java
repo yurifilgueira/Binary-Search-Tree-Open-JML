@@ -164,23 +164,27 @@ public class Tree {
 //
 //        System.out.print(root.getValue() + " ");
 //    }
-//
-//    public int findDepth(Node root, int value){
-//        if(root == null){
-//            return -1;
-//        }
-//
-//        int distance = -1;
-//
-//        if((root.getValue() == value) ||
-//            (distance = findDepth(root.getLeft(), value)) >= 0 ||
-//            (distance = findDepth(root.getRight(), value)) >= 0){
-//            return distance + 1;
-//        }
-//
-//        return distance;
-//    }
-//
+
+    //@ public normal_behavior
+    //@ ensures \result >= -1;
+    //@ ensures (\result == -1) <==> (findDepth(root.getLeft(), value) == -1 && findDepth(root.getRight(), value) == -1);
+    //@ ensures (\result >= 0) ==> (findDepth(root.getLeft(), value) >= 0 || findDepth(root.getRight(), value) >= 0);
+    public int findDepth(Node root, int value){
+        if(root == null){
+            return -1;
+        }
+
+        int distance = -1;
+
+        if((root.getValue() == value) ||
+            (distance = findDepth(root.getLeft(), value)) >= 0 ||
+            (distance = findDepth(root.getRight(), value)) >= 0){
+            return distance + 1;
+        }
+
+        return distance;
+    }
+
 //    public void findAllDepths(Node root){
 //        root.setDepth(findDepth(this.root, root.getValue()));
 //
