@@ -21,11 +21,15 @@ public class Node {
     //@ ensures Integer.MIN_VALUE <= value <= Integer.MAX_VALUE;
     //@ ensures left == null;
     //@ ensures right == null;
+    //@ ensures depth == 0;
+    //@ ensures height == 0;
     //@ pure
     public Node(int value) {
         this.value = value;
         left = null;
         right = null;
+        depth = 0;
+        height = 0;
     }
 
     //@ public normal_behavior
@@ -78,7 +82,7 @@ public class Node {
     }
 
     //@ public normal_behavior
-    //@ requires 0 <= depth <= Integer.MAX_VALUE;
+    //@ requires depth >= 0;
     //@ ensures this.depth == depth;
     //@ assignable this.depth;
     public void setDepth(int depth) {

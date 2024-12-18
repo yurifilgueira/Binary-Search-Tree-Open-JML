@@ -1,5 +1,7 @@
 package model.entities;
 
+import java.util.Stack;
+
 public class Tree {
     //@ spec_public
     private /*@ nullable*/ Node root;
@@ -152,24 +154,44 @@ public class Tree {
 //            printInOrder(root.getRight());
 //        }
 //    }
-//
-//    public void printPostOrder(Node root){
-//        if(root.getLeft() != null){
-//            printPostOrder(root.getLeft());
-//        }
-//
-//        if(root.getRight() != null){
-//            printPostOrder(root.getRight());
-//        }
-//
-//        System.out.print(root.getValue() + " ");
-//    }
 
-    //@ public normal_behavior
-    //@ ensures \result >= -1;
-    //@ ensures (\result == -1) <==> (findDepth(root.getLeft(), value) == -1 && findDepth(root.getRight(), value) == -1);
-    //@ ensures (\result >= 0) ==> (findDepth(root.getLeft(), value) >= 0 || findDepth(root.getRight(), value) >= 0);
-    public int findDepth(Node root, int value){
+    /*@ public normal_behavior
+      @     requires root != null;
+      @     requires Integer.MIN_VALUE <= root.getValue() <= Integer.MAX_VALUE;
+      @ also
+      @ public normal_behavior
+      @     requires root == null;
+    //@ assignable System.out.outputText, System.out.eol;
+    */
+    public void printPostOrder(/*@ nullable*/ Node root){
+
+        if (root == null) {
+            return;
+        }
+
+        //@ assert root != null;
+        if(root.getLeft() != null){
+            printPostOrder(root.getLeft());
+        }
+
+        if(root.getRight() != null){
+            printPostOrder(root.getRight());
+        }
+
+        // System.out.print(root.getValue() + " ");
+    }
+
+    /*@ public normal_behavior
+      @     requires root != null;
+      @     requires Integer.MIN_VALUE <= value <= Integer.MAX_VALUE;
+      @     ensures \result >= -1;
+      @ also
+      @ public normal_behavior
+      @     requires root == null;
+      @     ensures \result == -1;
+      @ pure
+    */
+    public int findDepth(/*@ nullable*/ Node root, int value){
         if(root == null){
             return -1;
         }
@@ -179,18 +201,33 @@ public class Tree {
         if((root.getValue() == value) ||
             (distance = findDepth(root.getLeft(), value)) >= 0 ||
             (distance = findDepth(root.getRight(), value)) >= 0){
+
+            //@ assume distance < Integer.MAX_VALUE;
             return distance + 1;
         }
 
         return distance;
     }
 
-    //@ public normal_behavior
-    //@ requires root != null;  // Pre-condition: the root cannot be null
-    //@ ensures (\forall Node n; \exists d; n.getDepth() == findDepth(this.root, n.getValue()));
-    //@ ensures \terminates;
-    public void findAllDepths(Node root){
-        root.setDepth(findDepth(this.root, root.getValue()));
+    /*@ public normal_behavior
+      @     requires root != null;
+      @     requires Integer.MIN_VALUE <= root.getValue() <= Integer.MAX_VALUE;
+      @ also
+      @ public normal_behavior
+      @     requires root == null;
+    */
+    public void findAllDepths(/*@ nullable*/ Node root){
+
+        if (root == null) {
+            return;
+        }
+
+        //@ assert root != null;
+        int depth = findDepth(this.root, root.getValue());
+        if (depth >= 0) {
+            //@ assert depth >= 0;
+            root.setDepth(depth);
+        }
 
         if(root.getLeft() != null){
             findAllDepths(root.getLeft());
@@ -285,23 +322,38 @@ public class Tree {
 //        return result.toString();
 //    }
 //
-//    public boolean isThereANode(int value){
-//        return search(root, value) != null;
-//    }
-//
-//    public Node search(Node root, int value){
-//        if(root == null || root.getValue() == value){
-//            return root;
-//        }
-//
-//        if(root.getValue() < value){
-//            return search(root.getRight(), value);
-//        }
-//
-//        return search(root.getLeft(), value);
-//    }
-//
-//    public Node insert(Node root, int value){
+
+    //@ public normal_behavior
+    //@ requires Integer.MIN_VALUE <= value <= Integer.MAX_VALUE;
+    //@ ensures \result == true || \result == false;
+    //@ pure
+    public boolean isThereANode(int value){
+        return search(root, value) != null;
+    }
+
+    /*@ public normal_behavior
+      @     requires root != null;
+      @     requires Integer.MIN_VALUE <= value <= Integer.MAX_VALUE;
+      @ also
+      @ public normal_behavior
+      @     requires root == null;
+      @ pure
+    */
+    public /*@ nullable */ Node search(/*@ nullable*/Node root, int value){
+        if(root == null || root.getValue() == value){
+            return root;
+        }
+
+        if(root.getValue() < value){
+            return search(root.getRight(), value);
+        }
+
+        return search(root.getLeft(), value);
+    }
+
+//    //@ public normal_behavior
+//    //@ requires
+//    public Node insert(/*@ nullable*/Node root, int value){
 //
 //        if (this.root == null){
 //            setRoot(new Node(value));
@@ -342,7 +394,7 @@ public class Tree {
 //
 //        return root;
 //    }
-//
+////
 //    public Node remove(Node root, int value){
 //        if(root == null){
 //            return root;
@@ -383,45 +435,88 @@ public class Tree {
 //
 //    }
 //
-//    public int getSize(Node root){
-//        return countNodes(root);
-//    }
-//
-//    public int countNodes(Node root){
-//        if (root == null){
-//            return 0;
-//        }
-//        else {
-//             return  1 + (countNodes(root.getLeft()) + countNodes(root.getRight()));
-//        }
-//
-//    }
-//
-//    public double calculateMean(Node root){
+
+    //@ public normal_behavior
+    //@ ensures \result >= 0;
+    //@ pure
+    public int getSize(/*@ nullable*/ Node root){
+        return countNodes(root);
+    }
+
+    /*@ public normal_behavior
+      @     requires root != null;
+      @     ensures \result >= 0;
+      @ also
+      @ public normal_behavior
+      @     requires root == null;
+      @     ensures \result == 0;
+      @ pure
+    */
+    public int countNodes(/*@ nullable*/ Node root){
+        if (root == null){
+            return 0;
+        }
+        else {
+            int leftCount = countNodes(root.getLeft());
+            int rightCount = countNodes(root.getRight());
+
+            //@ assert leftCount >= 0;
+            //@ assert rightCount >= 0;
+
+            //@ assume (leftCount + rightCount) <= Integer.MAX_VALUE;
+            //@ assume (1 + (leftCount + rightCount)) <= Integer.MAX_VALUE;
+
+            return (1 + (leftCount + rightCount));
+        }
+    }
+
+//     /*
+//      @ public normal_behavior
+//      @     requires root == null;
+//      @     ensures \result == 0;
+//      @ also
+//      @ public exceptional_behavior
+//      @     requires root != null;
+//      @     requires this.getSize(root) > 0;
+//      @     ensures \result >= 0;
+//      @ pure
+//    */
+//    public double calculateMean(/*@ nullable*/Node root){
 //
 //        if (root == null){
 //            return 0;
 //        }
 //
 //        Stack<Node> stack = new Stack<>();
-//        stack.push(root);
+//
+//       // stack.push(root);
 //
 //        int sumValues = 0;
 //
+////        @ loop_invariant sumValues >= 0;
+////        @ loop_invariant stack != null;
 //        while(!stack.isEmpty()){
 //            Node aux = stack.pop();
+//
+//            //@ assume Integer.MIN_VALUE < (sumValues + aux.getValue()) < Integer.MAX_VALUE;
 //            sumValues += aux.getValue();
 //
 //            if(aux.getRight() != null){
+//                //@ assume aux.getRight() != null;
+//                //@ assert stack != null;
 //                stack.push(aux.getRight());
 //            }
 //
 //            if(aux.getLeft() != null){
+//                //@ assume aux.getLeft() != null;
+//                //@ assert stack != null;
 //                stack.push(aux.getLeft());
 //            }
 //        }
 //
+//        // @ assert this.getSize(root) > 0;
 //        int sizeTree = getSize(root);
+//        // @ assume sizeTree > 1;
 //
 //        return (double) sumValues / sizeTree;
 //
